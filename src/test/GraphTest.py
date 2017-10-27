@@ -19,13 +19,9 @@ class GraphTest(unittest.TestCase):
         }
         self.graph = graph.Graph(G)
         self.empty_graph = graph.Graph()
-        k4_G = {
-            "a": ["b", "d"],
-            "b": ["a", "c", "d"],
-            "c": ["b", "d"],
-            "d": ["a", "b", "c"]
-        }
-        self.K4 = graph.Graph(k4_G)
+        self.K4 = graph.Graph()
+        self.K4.read_from_file(filename="../../test_data/K4.txt")
+        #self.K4.print_graph()
 
     def test_vertex_degree(self):
 
@@ -40,9 +36,11 @@ class GraphTest(unittest.TestCase):
 
 
     def test_density(self):
+        # print(self.graph.density())
         self.assertEqual(self.graph.number_of_edges(), 9)
         self.assertEqual(self.graph.number_of_vertices(), 7)
         self.assertEqual(self.graph.density(), 9.0 / 21.0)
+        self.assertEqual(self.K4.density(), 1.0)
 
 
     def test_degree_seq(self):
@@ -56,8 +54,8 @@ class GraphTest(unittest.TestCase):
 
     def test_clustering(self):
         self.assertEqual(self.graph.global_clustering_coefficient(), 0.5)
-        self.assertEqual(self.K4.global_clustering_coefficient(), 0.75)
-        self.assertEqual(self.empty_graph.global_clustering_coefficient(), 0.0)
+        self.assertEqual(self.K4.global_clustering_coefficient(), 1.0)
+        #self.assertEqual(self.empty_graph.global_clustering_coefficient(), 0.0)
 
 
     def test_shorthest_path_uv(self):
@@ -66,6 +64,7 @@ class GraphTest(unittest.TestCase):
     def test_diamter(self):
         self.assertEqual(self.graph.diameter(), 3)
         self.assertEqual(self.empty_graph.diameter(), 0)
+        self.assertEqual(self.K4.diameter(), 1)
 
     def test_spanning_tree(self):
         s_tree = self.graph.spanning_tree()
