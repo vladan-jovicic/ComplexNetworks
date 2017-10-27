@@ -368,7 +368,7 @@ class Graph(object):
         comp_diams = [u_diameter(u) for u in self.vertices()]
 
         # finally compute the diameter
-        diam = 0 if len(comp_diams) == 0 else max(comp_diams)
+        diam = float("inf") if len(comp_diams) == 0 else max(comp_diams)
 
         return diam
 
@@ -476,5 +476,5 @@ if __name__ == "__main__":
     print(graph.vertices())
     print("Edges of graph:")
     print(graph.edges())
-    print("Connected components")
-    print(graph.connected_components())
+    empty = Graph()
+    print(empty.diameter())
