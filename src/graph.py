@@ -162,7 +162,7 @@ class Graph(object):
         degree_seq = sorted(self.vertices_degree_list(), reverse=True)
         return degree_seq
 
-    def erdos_gallai(self):
+    def erdos_gallai(self, degree_seq = None):
         """
         Erdos Gallai theorem states that a non-increasing
         sequence of n numbers d_i is a degree sequence of a simple graph
@@ -173,15 +173,20 @@ class Graph(object):
         :return: True if the degree sequence satisfies both conditions and False otherwise
         """
 
-        degree_seq = self.degree_sequence()
+        if degree_seq is None:
+            degree_seq = self.degree_sequence()
+            num_vertices = self.number_of_vertices()
+        else:
+            num_vertices = len(degree_seq)
+            degree_seq = sorted(degree_seq, reverse=True)
 
         # first condition is satisfied by default
+        if sum(degree_seq) % 2 != 0:
+            return False
 
         # second condition
-        num_vertices = self.number_of_vertices()
-
         def compute_right_sum(k):
-            elements = [min(d, k) for d in degree_seq[k+1:]]
+            elements = [min(d, k+1) for d in degree_seq[k+1:]]
             return sum(elements)
 
         left_sum = 0
@@ -190,7 +195,7 @@ class Graph(object):
             left_sum = left_sum + degree_seq[k]
             right_sum = compute_right_sum(k)
 
-            if left_sum > k*(k-1) + right_sum:
+            if left_sum > k*(k+1) + right_sum:
                 return False
 
         return True
@@ -325,11 +330,13 @@ class Graph(object):
 
         while len(queue) > 0:
             # take the best so far
-            u = queue.pop()
+            u = queue.popleft()
 
             u_neighbors = self.get_neighbors(u)
 
             updated = {v: dist[u] + 1 for v in u_neighbors if v not in dist.keys()}
+            print("Updated distance %d" % (dist[u] + 1))
+            print(updated)
 
             # append the queue
             queue.extend(updated.keys())
@@ -346,7 +353,7 @@ class Graph(object):
         dist.update(non_reachable)
 
         if arg_u is not None and arg_v is not None:
-            return dist[v]
+            return dist[arg_v]
         else:
             return dist
 
@@ -448,9 +455,9 @@ class Graph(object):
 
         input_file = open(filename, "r")
 
-        for str_edge in input_file.readlines():
-            [u, v] = str_edge.rstrip().split(' ')
-            self.add_edge((u, v))
+        for i, str_edge in enumerate(input_file.readlines()):
+            [u, v]= str_edge.rstrip().split('\t')
+            self.add_edge((u,v))
 
         input_file.close()
         return True
@@ -471,10 +478,7 @@ if __name__ == "__main__":
       "f": ["b", "c"],
       "g": ["a", "d"]
     }
-    graph = Graph(G)
-    print("Vertices of graph:")
-    print(graph.vertices())
-    print("Edges of graph:")
-    print(graph.edges())
-    empty = Graph()
-    print(empty.diameter())
+    g = Graph()
+    g.read_from_file("../test_data/graph_100n_1000m.txt")
+    g.shortest_path(u='2')
+    print(g.diameter())

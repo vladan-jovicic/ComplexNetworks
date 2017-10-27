@@ -4,7 +4,8 @@
 
 # stupid pyc files
 *.pyc
-
+# python jupyter notebook
+*.ipynb
 # User-specific stuff:
 .idea/**/workspace.xml
 .idea/**/tasks.xml
