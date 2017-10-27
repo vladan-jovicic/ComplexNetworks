@@ -226,8 +226,8 @@ class Graph(object):
 
 
         if num_conn_triplets == 0:
-            return 0
-        print("conn = %d, closed = %d" % (num_conn_triplets, num_closed_triplets))
+            return 0.0
+
         return float(num_closed_triplets) / float(num_conn_triplets)
 
     def get_neighbors(self, u):
@@ -340,7 +340,7 @@ class Graph(object):
         # nodes which are not in the list are not in the
         # same component as u
 
-        non_reachable = {v: int("inf") for v in self.vertices() if v not in dist.keys()}
+        non_reachable = {v: float("inf") for v in self.vertices() if v not in dist.keys()}
 
         # update for non_reachable
         dist.update(non_reachable)
@@ -434,6 +434,29 @@ class Graph(object):
                 parent_and_rank[uroot][1] += 1
 
         return s_tree
+
+    def read_from_file(self, filename = None):
+        """
+        Reads graph from a file.
+        :param filename: path to the file
+        :return: True if the graph is read successfully. If
+        filename is not specified or it does not exist, ValueError
+        and IOError are raised (respectively).
+        """
+        if filename is None:
+            raise ValueError("Filename is not specified")
+
+        input_file = open(filename, "r")
+
+        for str_edge in input_file.readlines():
+            [u, v] = str_edge.rstrip().split(' ')
+            self.add_edge((u, v))
+
+        input_file.close()
+        return True
+
+    def print_graph(self):
+        print(self.__graph_dict)
 
 
 
