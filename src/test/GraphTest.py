@@ -19,6 +19,7 @@ class GraphTest(unittest.TestCase):
         }
         self.graph = graph.Graph(G)
         self.empty_graph = graph.Graph()
+        self.empty_graph.print_graph()
         self.K4 = graph.Graph()
         self.K4.read_from_file(filename="../../test_data/K4.txt")
         #self.K4.print_graph()
