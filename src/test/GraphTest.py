@@ -1,5 +1,6 @@
 import unittest
 import os, sys
+import argparse
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -7,7 +8,8 @@ import graph
 
 class GraphTest(unittest.TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         G = {
             "a": ["c", "d", "g"],
             "b": ["c", "f"],
@@ -17,9 +19,10 @@ class GraphTest(unittest.TestCase):
             "f": ["b", "c"],
             "g": ["a", "d"]
         }
-        self.graph = graph.Graph(G)
-        self.empty = graph.Graph()
-        #self.complete = graph.Graph()
+        #filename = "../../test_data/graph_100n_1000m.txt"
+        super(GraphTest, cls).setUpClass()
+        cls.graph = graph.Graph(G)
+        #cls.graph.read_from_file(filename=filename)
 
     def test_vertex_degree(self):
         self.assertEqual(self.graph.vertex_degree("a"), 3)
@@ -38,11 +41,9 @@ class GraphTest(unittest.TestCase):
 
     def test_erdos_gallai(self):
         self.assertTrue(self.graph.erdos_gallai())
-        self.assertTrue(self.empty.erdos_gallai([0]))
 
     def test_clustering(self):
         self.assertEqual(self.graph.global_clustering_coefficient(), 0.5)
-        self.assertEqual(self.empty.global_clustering_coefficient(), 0.0)
 
     def test_shortest_path_uv(self):
         self.assertEqual(self.graph.shortest_path(u="a", v="b"), 2)

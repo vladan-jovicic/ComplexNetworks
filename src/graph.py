@@ -1,10 +1,12 @@
-""" CR15 graph library """
 from collections import deque
 import math
-class Graph(object):
 
+
+class Graph(object):
     def __init__(self, graph_dict={}):
-        """ initializes a graph object """
+        """
+        initializes a graph object
+        """
         self.__graph_dict = graph_dict
 
     def vertices(self):
@@ -32,10 +34,12 @@ class Graph(object):
         return self.__generate_edges()
 
     def add_vertex(self, vertex):
-        """ If vertex is not in self.__graph_dict, a key "vertex" with an empty
-        list as a value is added to the dictionary. Otherwise nothing has to be 
-        done.
-        :return: True if the vertex is not present in the graph, otherwise false."""
+        """
+        If vertex is not in self.__graph_dict, a key "vertex" with an empty list
+         as a value is added to the dictionary. Otherwise nothing has to be done.
+
+        :return: True if the vertex is not present in the graph, otherwise false.
+        """
 
         if vertex not in self.__graph_dict.keys():
             self.__graph_dict[vertex] = []
@@ -44,8 +48,14 @@ class Graph(object):
             return False
 
     def is_vertex_present(self, vertex):
-        """Checks if the vertex is already created.
-        Returns True if it is otherwise False"""
+        """
+        Checks if the vertex is already created. Returns True if it is otherwise False
+
+        :param vertex: name of the vertex
+
+        :return: true if vertex is in the graph, false otherwise
+        """
+
         if vertex in self.__graph_dict.keys():
             return True
         else:
@@ -56,8 +66,9 @@ class Graph(object):
         :param u: a vertex of the graph
         :param v: a vertex of the graph
         :return: Returns True if v is in the neighborhood of u.
-        It raises KeyError if u is not present in the graph.
+                It raises KeyError if u is not present in the graph.
         """
+
         if u not in self.vertices():
             raise KeyError("Vertex is not present in the graph")
 
@@ -65,8 +76,10 @@ class Graph(object):
         return v in u_neighbors
 
     def add_edge(self, edge):
-        """ assumes that edge is of type set, tuple or list. No loops or 
-        multiple edges.
+        """
+        Add an edge to graph. Assumes that edge is of type set, tuple or list.
+        No loops or multiple edges.
+
         :return: Returns true if edge is not present, otherwise false."""
 
         u, v = edge
@@ -89,31 +102,38 @@ class Graph(object):
 
     def add_edges(self, edges):
         """
-        Adds a list of edges to graph
+        Adds a list of edges to graph.
+
         :param edges: a list of edges to be added
         :return: void
         """
+
         for edge in edges:
             self.add_edge(edge)
 
     def __generate_edges(self):
-        """ A static method generating the edges of the graph "graph". Edges 
+        """
+        A static method generating the edges of the graph "graph". Edges \
         are represented as sets two vertices, with no loops.
         :return: a list of tuples representing the edges
         """
+
         edges = []
-        for u in self.__graph_dict.keys():
-            for v in self.__graph_dict[u]:
-                if (u, v) not in edges and (v, u) not in edges:
-                    edges.append((u, v))
+        for u in self.vertices():
+
+            new_edges = [(u, v) for v in self.get_neighbors(u) if (u, v) not in edges and (v,u) not in edges]
+            edges.extend(new_edges)
+
         return edges
 
     def vertex_degree(self, vertex):
         """
-        Returns the degree of the vertex
+        Returns the degree of the vertex.
+
         :param vertex: vertex for which degree is computed
         :return: return the degree if the vertex is present, otherwise raises keyerror
         """
+
         if self.is_vertex_present(vertex):
             return len(self.__graph_dict[vertex])
         else:
@@ -123,15 +143,16 @@ class Graph(object):
         """
         :return: returns a list of degrees of vertices
         """
+
         degrees = [self.vertex_degree(u) for u in self.vertices()]
 
         return degrees
 
-
     def find_isolated_vertices(self):
         """
-        :return:a list of vertices of degree 0.
+        :return: a list of vertices of degree 0.
         """
+
         isolated_vertices = [u for u in self.vertices() if self.vertex_degree(u) == 0]
 
         return isolated_vertices
@@ -140,6 +161,7 @@ class Graph(object):
         """
         Density is ratio of number of edges and number of edges that
         complete graph has with the same number of vertices.
+
         :return: returns the density of the graph
         """
 
@@ -155,21 +177,24 @@ class Graph(object):
 
     def degree_sequence(self):
         """
-        Degree sequence is a list of all degrees in non-increasing order
+        Degree sequence is a list of all degrees in non-increasing order.
+
         :return: a degree sequence of the graph
         """
 
         degree_seq = sorted(self.vertices_degree_list(), reverse=True)
         return degree_seq
 
-    def erdos_gallai(self, degree_seq = None):
+    def erdos_gallai(self, degree_seq=None):
         """
         Erdos Gallai theorem states that a non-increasing
         sequence of n numbers d_i is a degree sequence of a simple graph
         if and only if the sum of sequence is even and the condition
-        sum_{i=1}^{k}{d_i} <= k(k-1) + sum_{i=k+1}^n min(d_i, k) for all k
-        This can be implemented in time O(nlogn). However, the current implementation
+        $\sum_{i=1}^{k}{d_i} \leq k(k-1) + \sum_{i=k+1}^n \min(d_i, k) \text{ for all } k$
+        This can be implemented in time $O(n)$. However, the current implementation
         requires O(n^2) time.
+
+        :param degree_seq: If it is None, then the degree sequence of the graph is used.
         :return: True if the degree sequence satisfies both conditions and False otherwise
         """
 
@@ -181,21 +206,22 @@ class Graph(object):
             degree_seq = sorted(degree_seq, reverse=True)
 
         # first condition is satisfied by default
+
         if sum(degree_seq) % 2 != 0:
             return False
 
         # second condition
+
         def compute_right_sum(k):
-            elements = [min(d, k+1) for d in degree_seq[k+1:]]
+            elements = [min(d, k + 1) for d in degree_seq[k + 1:]]
             return sum(elements)
 
         left_sum = 0
         for k in range(num_vertices):
-            # compute left and right sum
             left_sum = left_sum + degree_seq[k]
             right_sum = compute_right_sum(k)
 
-            if left_sum > k*(k+1) + right_sum:
+            if left_sum > k * (k + 1) + right_sum:
                 return False
 
         return True
@@ -204,7 +230,8 @@ class Graph(object):
         """
         Global clustering coefficient is the ratio of number of triangles and
         number of connected triplets of vertices
-        :return: clustering coefficient of the graph
+
+        :return: float, clustering coefficient of the graph
         """
 
         num_closed_triplets = 0
@@ -219,7 +246,7 @@ class Graph(object):
             # triplet centered at u
             u_neighbors = self.get_neighbors(u)
             for i, v in enumerate(u_neighbors):
-                for w in u_neighbors[i+1:]:
+                for w in u_neighbors[i + 1:]:
                     if self.in_neighbourhood(v, w):
                         # this is a closed triplet
                         tmp_closed_triplets += 1
@@ -228,7 +255,6 @@ class Graph(object):
 
             num_closed_triplets += tmp_closed_triplets
             num_conn_triplets += tmp_conn_trplets
-
 
         if num_conn_triplets == 0:
             return 0.0
@@ -248,22 +274,24 @@ class Graph(object):
 
     def connected_components(self):
         """
-        Computes connected components
-        :return: a list of lists, each containing vertices from the same conn component
+        Computes connected components.
+
+        :return: a list of lists, each containing vertices from the same conn component.
         """
+
         n = self.number_of_vertices()
-        all_comps = [] #
+        all_comps = []  #
 
         # keep all unvistied nodes in a set
         all_nodes = set(self.vertices())
 
-        while len(all_nodes) > 0: # while there is an unvisited node
+        while len(all_nodes) > 0:  # while there is an unvisited node
             u = all_nodes.pop()
 
-            curr_component = {u} # all nodes belonging to this component
-            bfs_queue = {u} # use set (our favourite data struct) as a bfs queue
+            curr_component = {u}  # all nodes belonging to this component
+            bfs_queue = {u}  # use set (our favourite data struct) as a bfs queue
 
-            while len(bfs_queue) > 0: # while there is a node in the queue
+            while len(bfs_queue) > 0:  # while there is a node in the queue
                 u = bfs_queue.pop()
 
                 # get all my neighbors
@@ -290,9 +318,11 @@ class Graph(object):
         """
         Computes the number of connected components and
         the size of each componenent
+
         :return: a pair: thi first entry is the number of components, the second
-        is a list constaining sizes of components
+                        is a list constaining sizes of components
         """
+
         components = self.connected_components()
         number_of_comps = len(components)
 
@@ -301,7 +331,6 @@ class Graph(object):
             sizes.append(len(comp))
 
         return number_of_comps, sizes
-
 
     def shortest_path(self, u=None, v=None):
         """
@@ -312,12 +341,15 @@ class Graph(object):
         between u and all other vertices.
         Finally, if both of them are not None, it computes the shorthest path
         between u and v.
+
         :param u: the source vertex
         :param v: the end vertex
         :return: the shortest path
         """
+
         # now we need a real queue :(
         if u is None and v is None:
+
             return {u: self.shortest_path(u=u) for u in self.vertices()}
 
         dist, arg_u, arg_v = {}, u, v
@@ -335,8 +367,6 @@ class Graph(object):
             u_neighbors = self.get_neighbors(u)
 
             updated = {v: dist[u] + 1 for v in u_neighbors if v not in dist.keys()}
-            print("Updated distance %d" % (dist[u] + 1))
-            print(updated)
 
             # append the queue
             queue.extend(updated.keys())
@@ -359,15 +389,18 @@ class Graph(object):
 
     def diameter(self):
         """
-        Computes the diameter of the graph
+        Computes the diameter of the graph.
+
         :return: The maximum of distances between any pair
-        of nodes or infinity if the graph is not connected
+                of nodes or infinity if the graph is not connected
         """
+
         dist = self.shortest_path()
 
         # a temporary function to compute the largest distance
         # starting at u
         def u_diameter(u):
+
             values = dist[u].values()
             return 0 if len(values) == 0 else max(values)
 
@@ -375,7 +408,7 @@ class Graph(object):
         comp_diams = [u_diameter(u) for u in self.vertices()]
 
         # finally compute the diameter
-        diam = float("inf") if len(comp_diams) == 0 else max(comp_diams)
+        diam = 0 if len(comp_diams) == 0 else max(comp_diams)
 
         return diam
 
@@ -389,6 +422,7 @@ class Graph(object):
         # get components and their sizes
         component_sizes = [(len(comp), i) for i, comp in enumerate(all_components)]
         if len(component_sizes) == 0:
+
             return 0
 
         size_of_largest, idx_largest = max(component_sizes)
@@ -409,21 +443,24 @@ class Graph(object):
     def spanning_tree(self):
         """
         Computes the spanning tree of the graph using Kruskal algorithm
-        and union - find. Complexity: O(mlog*(n))
+        and union - find. Complexity: $O(m\log*(n))$
+
         :return: a list of tuples representing edges of the tree
         """
-        parent_and_rank = {node:[node,0] for node in self.vertices()}
-        s_tree = [] # edges of resulting tree
+
+        parent_and_rank = {node: [node, 0] for node in self.vertices()}
+        s_tree = []  # edges of resulting tree
+
         def find_parent(x):
             if parent_and_rank[x][0] != x:
                 parent_and_rank[x] = find_parent(parent_and_rank[x][0])
             return parent_and_rank[x]
 
-        for u,v in self.edges():
+        for u, v in self.edges():
             uroot = find_parent(u)[0]
             vroot = find_parent(v)[0]
 
-            if uroot == vroot: # this edge create a cycle
+            if uroot == vroot:  # this edge create a cycle
                 continue
 
             # otherwise, add this edge to the tree and join components
@@ -442,41 +479,38 @@ class Graph(object):
 
         return s_tree
 
-    def read_from_file(self, filename = None):
+    def read_from_file(self, filename=None):
         """
         Reads graph from a file.
+
         :param filename: path to the file
         :return: True if the graph is read successfully. If
-        filename is not specified or it does not exist, ValueError
-        and IOError are raised (respectively).
+                filename is not specified or it does not exist, ValueError
+                and IOError are raised (respectively).
         """
+
         if filename is None:
             raise ValueError("Filename is not specified")
 
         input_file = open(filename, "r")
 
         for i, str_edge in enumerate(input_file.readlines()):
-            [u, v]= str_edge.rstrip().split('\t')
-            self.add_edge((u,v))
+            [u, v] = str_edge.rstrip().split('\t')
+            self.add_edge((u, v))
 
         input_file.close()
         return True
 
-    def print_graph(self):
-        print(self.__graph_dict)
-
-
 
 if __name__ == "__main__":
-
     G = {
-      "a": ["c", "d", "g"],
-      "b": ["c", "f"],
-      "c": ["a", "b", "d", "f"],
-      "d": ["a", "c", "e", "g"],
-      "e": ["d"],
-      "f": ["b", "c"],
-      "g": ["a", "d"]
+        "a": ["c", "d", "g"],
+        "b": ["c", "f"],
+        "c": ["a", "b", "d", "f"],
+        "d": ["a", "c", "e", "g"],
+        "e": ["d"],
+        "f": ["b", "c"],
+        "g": ["a", "d"]
     }
     g = Graph()
     g.read_from_file("../test_data/graph_100n_1000m.txt")
