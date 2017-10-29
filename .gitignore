@@ -6,6 +6,10 @@
 *.pyc
 # python jupyter notebook
 *.ipynb
+
+# ignore build doc
+doc/s_build/*
+
 # User-specific stuff:
 .idea/**/workspace.xml
 .idea/**/tasks.xml
