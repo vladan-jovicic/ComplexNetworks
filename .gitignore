@@ -9,7 +9,6 @@
 # *.ipynb
 
 # ignore build doc
-doc/s_build/*
 
 # User-specific stuff:
 .idea/**/workspace.xml
