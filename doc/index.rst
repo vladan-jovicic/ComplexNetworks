@@ -10,7 +10,8 @@ Welcome to Complex Networks Algorithms's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   howto 
+   howto
+   testing
    project
    code
 

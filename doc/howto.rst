@@ -1,8 +1,27 @@
-How to use the implemented algorithms
-=====================================
 
-Importing *Graph* class
------------------------
+How to use implemented algorithms
+=================================
+
+Overview
+--------
+
+The project has the following structure:
+
+-  *doc* contains documentation of the project
+-  *src* contains all the source code
+
+   -  *algorithms* contains different algorithms
+   -  *test* contains modules for testing with unittest
+
+-  *test\_data* contains test data
+-  *tools* different tools (scripts) used for building and testing
+-  *Notebooks* contains ipython notebooks which demonstrate usage
+
+Importing *Graph* module
+------------------------
+
+Firstly, we will import the *Graph* module. We are in the folder
+*Notebooks* so, we need to append the path.
 
 .. code:: ipython2
 
@@ -38,8 +57,9 @@ parameters of empty graph.
     The diameter of empty graph: 0
     The global cluster coeff of empty graph is: 0.000000
 
+
 Reading graph from a file
---------------------------
+-------------------------
 
 Now we will show how to read graph from a file and compute requested
 parameters.
@@ -51,8 +71,6 @@ parameters.
     filenames = ['zachary_connected', 'graph_1000n_4000m', 'graph_100n_1000m']
     
     graphs = [] # store all three graph objects in a list
-    
-    G1.read_from_file(path+filenames[0]+txt)
     for i, g_name in enumerate(filenames):
         g = graph.Graph({})
         g.read_from_file(filename=path+g_name+txt)
@@ -74,8 +92,13 @@ parameters.
     1000, 3989
     100, 960
 
-Solution of problems in the assignment
---------------------------------------
+
+Computing requested parameters
+------------------------------
+
+We assume that the provided graphs are simple and thus multi edges in
+the files are ignored. Since one of the graphs has 1000 vertices and
+3989 edges, computation of diameter will take some time.
 
 .. code:: ipython2
 
@@ -88,7 +111,7 @@ Solution of problems in the assignment
         results.append(temp_results)
 
 Now we will present the results in a table. Notice that package
-*ipy\_table* required.
+*ipy\_table* is required.
 
 .. code:: ipython2
 

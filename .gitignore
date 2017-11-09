@@ -4,8 +4,9 @@
 .*
 # stupid pyc files
 *.pyc
+
 # python jupyter notebook
-*.ipynb
+# *.ipynb
 
 # ignore build doc
 doc/s_build/*

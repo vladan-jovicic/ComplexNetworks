@@ -11,7 +11,7 @@ class GraphTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        filename = "../../test_data/graph_1000n_4000m.txt"
+        filename = "../../test_data/zachary_connected.txt"
         super(GraphTest, cls).setUpClass()
         cls.graph = graph.Graph()
         cls.graph.read_from_file(filename=filename)
