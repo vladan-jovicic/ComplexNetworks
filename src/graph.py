@@ -1,3 +1,8 @@
+"""
+A module containing Graph class.
+We assume that every graph is simple, i.e.,
+there is no loops or multi edges.
+"""
 from collections import deque
 import math
 
@@ -26,6 +31,7 @@ class Graph(object):
         :return: returns the number of edges
         """
         return len(self.edges())
+
 
     def edges(self):
         """
@@ -120,7 +126,6 @@ class Graph(object):
 
         edges = []
         for u in self.vertices():
-
             new_edges = [(u, v) for v in self.get_neighbors(u) if (u, v) not in edges and (v,u) not in edges]
             edges.extend(new_edges)
 
