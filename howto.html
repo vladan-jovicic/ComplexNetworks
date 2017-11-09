@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>How to use the implemented algorithms &#8212; Complex Networks Algorithms 1.0.0 documentation</title>
+    <title>How to use implemented algorithms &#8212; Complex Networks Algorithms 1.0.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Project Summary" href="project.html" />
+    <link rel="next" title="Testing implemented algorithms" href="testing.html" />
     <link rel="prev" title="Welcome to Complex Networks Algorithms’s documentation!" href="index.html" /> 
   </head>
   <body>
@@ -38,7 +38,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="project.html" title="Project Summary"
+          <a href="testing.html" title="Testing implemented algorithms"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to Complex Networks Algorithms’s documentation!"
@@ -52,10 +52,27 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="how-to-use-the-implemented-algorithms">
-<h1>How to use the implemented algorithms<a class="headerlink" href="#how-to-use-the-implemented-algorithms" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="importing-graph-class">
-<h2>Importing <em>Graph</em> class<a class="headerlink" href="#importing-graph-class" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="how-to-use-implemented-algorithms">
+<h1>How to use implemented algorithms<a class="headerlink" href="#how-to-use-implemented-algorithms" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The project has the following structure:</p>
+<ul class="simple">
+<li><em>doc</em> contains documentation of the project</li>
+<li><em>src</em> contains all the source code<ul>
+<li><em>algorithms</em> contains different algorithms</li>
+<li><em>test</em> contains modules for testing with unittest</li>
+</ul>
+</li>
+<li><em>test_data</em> contains test data</li>
+<li><em>tools</em> different tools (scripts) used for building and testing</li>
+<li><em>Notebooks</em> contains ipython notebooks which demonstrate usage</li>
+</ul>
+</div>
+<div class="section" id="importing-graph-module">
+<h2>Importing <em>Graph</em> module<a class="headerlink" href="#importing-graph-module" title="Permalink to this headline">¶</a></h2>
+<p>Firstly, we will import the <em>Graph</em> module. We are in the folder
+<em>Notebooks</em> so, we need to append the path.</p>
 <div class="code ipython2 highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
 <span class="c1"># sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(&#39;../src/&#39;))))</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../src/&#39;</span><span class="p">)</span>
@@ -89,8 +106,6 @@ parameters.</p>
 <span class="n">filenames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;zachary_connected&#39;</span><span class="p">,</span> <span class="s1">&#39;graph_1000n_4000m&#39;</span><span class="p">,</span> <span class="s1">&#39;graph_100n_1000m&#39;</span><span class="p">]</span>
 
 <span class="n">graphs</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># store all three graph objects in a list</span>
-
-<span class="n">G1</span><span class="o">.</span><span class="n">read_from_file</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="n">filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">txt</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">g_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filenames</span><span class="p">):</span>
     <span class="n">g</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">Graph</span><span class="p">({})</span>
     <span class="n">g</span><span class="o">.</span><span class="n">read_from_file</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">path</span><span class="o">+</span><span class="n">g_name</span><span class="o">+</span><span class="n">txt</span><span class="p">)</span>
@@ -111,8 +126,11 @@ parameters.</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="solution-of-problems-in-the-assignment">
-<h2>Solution of problems in the assignment<a class="headerlink" href="#solution-of-problems-in-the-assignment" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="computing-requested-parameters">
+<h2>Computing requested parameters<a class="headerlink" href="#computing-requested-parameters" title="Permalink to this headline">¶</a></h2>
+<p>We assume that the provided graphs are simple and thus multi edges in
+the files are ignored. Since one of the graphs has 1000 vertices and
+3989 edges, computation of diameter will take some time.</p>
 <div class="code ipython2 highlight-default"><div class="highlight"><pre><span></span><span class="c1"># compute parameters</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">G</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graphs</span><span class="p">):</span>
     <span class="n">temp_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">number_of_vertices</span><span class="p">(),</span> <span class="n">G</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">(),</span>
@@ -123,7 +141,7 @@ parameters.</p>
 </pre></div>
 </div>
 <p>Now we will present the results in a table. Notice that package
-<em>ipy_table</em> required.</p>
+<em>ipy_table</em> is required.</p>
 <div class="code ipython2 highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ipy_table</span> <span class="k">import</span> <span class="o">*</span>
 
 
@@ -161,8 +179,8 @@ parameters.</p>
   <p class="topless"><a href="index.html"
                         title="previous chapter">Welcome to Complex Networks Algorithms’s documentation!</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="project.html"
-                        title="next chapter">Project Summary</a></p>
+  <p class="topless"><a href="testing.html"
+                        title="next chapter">Testing implemented algorithms</a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
@@ -187,7 +205,7 @@ parameters.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="project.html" title="Project Summary"
+          <a href="testing.html" title="Testing implemented algorithms"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to Complex Networks Algorithms’s documentation!"
