@@ -1,4 +1,6 @@
 """
+Module graph
+============
 A module containing Graph class.
 We assume that every graph is simple, i.e.,
 there is no loops or multi edges.
@@ -124,12 +126,12 @@ class Graph(object):
         :return: a list of tuples representing the edges
         """
 
-        edges = []
+        edges = set()
         for u in self.vertices():
             new_edges = [(u, v) for v in self.get_neighbors(u) if (u, v) not in edges and (v,u) not in edges]
-            edges.extend(new_edges)
+            edges.update(new_edges)
 
-        return edges
+        return list(edges)
 
     def vertex_degree(self, vertex):
         """
