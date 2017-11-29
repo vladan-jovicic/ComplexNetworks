@@ -38,20 +38,6 @@ def er_np(n, p, seed=None):
     # edge k has points i = floor((-1 + sqrt(1 + 8k))/2)
     # and j = k - i*(i+1) / 2
 
-    """
-    current_row, current_column, current_size = 1, n, n
-
-    for k, pr in enumerate(probabilities):
-        # if the proba is high enough add an edge
-        if float(pr / 100.0) - p > 0.0: G.add_edge((current_row-1, current_column-1))
-
-        current_column += 1
-        if current_column > current_size:
-            current_row += 1
-            current_column = 1
-            current_size -= 1
-
-    """
     return G
 
 

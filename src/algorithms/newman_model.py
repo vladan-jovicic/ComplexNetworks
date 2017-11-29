@@ -92,4 +92,5 @@ def irregular_edge_count(edges):
         if (u, v) in unique_edges or (v, u) in unique_edges: multi_edge_cnt += 1
         else: unique_edges.add(e)
 
-    return (loop_counter + multi_edge_cnt) / len(edges)
+    return float(loop_counter + multi_edge_cnt) / float(len(edges))
+

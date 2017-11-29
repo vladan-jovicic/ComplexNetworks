@@ -86,20 +86,6 @@
     <span class="c1"># edge k has points i = floor((-1 + sqrt(1 + 8k))/2)</span>
     <span class="c1"># and j = k - i*(i+1) / 2</span>
 
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    current_row, current_column, current_size = 1, n, n</span>
-
-<span class="sd">    for k, pr in enumerate(probabilities):</span>
-<span class="sd">        # if the proba is high enough add an edge</span>
-<span class="sd">        if float(pr / 100.0) - p &gt; 0.0: G.add_edge((current_row-1, current_column-1))</span>
-
-<span class="sd">        current_column += 1</span>
-<span class="sd">        if current_column &gt; current_size:</span>
-<span class="sd">            current_row += 1</span>
-<span class="sd">            current_column = 1</span>
-<span class="sd">            current_size -= 1</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">G</span></div>
 
 
