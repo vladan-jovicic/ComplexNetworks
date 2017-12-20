@@ -83,6 +83,15 @@ class Graph(object):
         u_neighbors = self.get_neighbors(u)
         return v in u_neighbors
 
+    def update_neighbors(self, u, new_neighbors):
+        """
+        Updates the list of vertices of a vertex.
+        :param u: Vertex whose neighborhood is updated
+        :param new_neighbors: (list) New neighbors of u
+        :return: None
+        """
+        self.__graph_dict[u] = new_neighbors
+
     def add_edge(self, edge):
         """
         Add an edge to graph. Assumes that edge is of type set, tuple or list.

@@ -8,7 +8,6 @@ import algorithms.watts_strogatz as ws
 class WSTest(unittest.TestCase):
 
     def test_init(self):
-        g = ws.watts_strogatz(10, 4, 0.3)
-
+        g = ws.watts_strogatz(10, 4, 0.5)
         self.assertEqual(g.number_of_edges(), 20)
 
