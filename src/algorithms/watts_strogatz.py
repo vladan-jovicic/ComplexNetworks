@@ -1,33 +1,24 @@
+"""
+Watts-Strogatz model
+--------------------
+This module contains functions for constructing
+a random graph following the Watts-Strogatz model.
+
+"""
 import os, sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 import graph
 import numpy as np
-from scipy.linalg import circulant
-
-
-def _distance_matrix(n):
-    Dmax = n // 2
-
-    D = range(Dmax + 1)
-    # this creates [0, 1, ... , n//2, n//2-1, ..., 1]
-    D += D[-2 + (n % 2):0:-1]
-
-    return circulant(D) / Dmax
-
-
-def _pd(d, p0, beta):
-    # beta times edge density +
-    return beta * p0 + (d <= p0) * (1 - beta)
 
 
 def watts_strogatz(n, k, beta, seed=1):
     """
     Creates a random graph following Watts-Strogatz model.
+
     :param n: (integer) Number of vertices.
     :param k: (integer) Number of neighbours. Must be even.
-    :param beta: (float) rewiring probability
+    :param beta: (float) Rewiring probability.
+    :param seed: Seed for the random number generator.
+
     :return: (Graph) a graph object
     """
     assert k % 2 == 0
@@ -37,9 +28,6 @@ def watts_strogatz(n, k, beta, seed=1):
     rng = np.random.RandomState(seed)
 
     ring = create_regular_ring_lattice(n, k)
-    ring_edges = ring.edges()
-
-    ws_graph = graph.Graph({})
 
     for u in range(n):
         u_neighbors = ring.get_neighbors(u)
@@ -69,6 +57,7 @@ def watts_strogatz(n, k, beta, seed=1):
 def create_regular_ring_lattice(n, k):
     """
     Creates a regular ring lattice graphs.
+
     :param n: (integer) Number of vertices.
     :param k: (integer) Number of neighbours.
     :return: a Graph instance representing the ring graph.

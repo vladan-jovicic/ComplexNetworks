@@ -1,5 +1,5 @@
 """
-algorithms.newman_model
+Newman Model
 -----------------------
 This module contains a functions for generating random graph
 using configuration model. In configuration model, one represents

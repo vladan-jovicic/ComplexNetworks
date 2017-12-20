@@ -1,3 +1,10 @@
+"""
+Barabasi-Albert Model
+---------------------
+This module contains functions for constructing
+a random graph following the Barabasi-Albert model.
+
+"""
 import numpy as np
 import sys
 sys.path.insert(0, '../')
@@ -8,10 +15,10 @@ import erdos_renyi as er
 def barabasi_albert(N, m, g=None, n=None, p=None, seed=1):
     """
     Creates a random graph following Barabasi-Albert model.
+
     :param N: Number of vertices.
     :param m: Number of neighbors for every new node.
-    :param g: A starting small network. If it is None,
-    a small network is generated using erdos renyi model.
+    :param g: A starting small network. If it is None, a small network is generated using erdos renyi model.
     :return: An instance of Graph representing the created graph.
     """
 

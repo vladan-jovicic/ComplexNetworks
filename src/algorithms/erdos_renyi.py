@@ -1,5 +1,5 @@
 """
-algorithms.erdos_renyi
+Erdos-Renyi Model
 ----------------------
 This module contains different functions for generating a random graphs
 using Erdos-Renyi models G(n, p) and G(n, m)
