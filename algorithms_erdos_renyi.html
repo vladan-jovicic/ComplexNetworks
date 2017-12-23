@@ -1,0 +1,320 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Algorithms &#8212; Complex Networks Algorithms 1.0.10 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.10',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="graph.Graph" href="code.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-algorithms.erdos_renyi">
+<span id="algorithms"></span><h1>Algorithms<a class="headerlink" href="#module-algorithms.erdos_renyi" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="erdos-renyi-model">
+<h2>Erdos-Renyi Model<a class="headerlink" href="#erdos-renyi-model" title="Permalink to this headline">¶</a></h2>
+<p>This module contains different functions for generating a random graphs
+using Erdos-Renyi models G(n, p) and G(n, m)</p>
+<dl class="function">
+<dt id="algorithms.erdos_renyi.compare_edge_count">
+<code class="descclassname">algorithms.erdos_renyi.</code><code class="descname">compare_edge_count</code><span class="sig-paren">(</span><em>n</em>, <em>p</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/erdos_renyi.html#compare_edge_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.erdos_renyi.compare_edge_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares number of edges of G(n,p) and G(n, m) where m = floor(p*C_2^n)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> – Number of nodes</li>
+<li><strong>p</strong> – Probability of having an edge</li>
+<li><strong>seed</strong> – Seed for generating random numbers. If it is not specified, time stamp is used</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the ratio suze(E(G(n, p))) / size(E(G(n, m)))</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algorithms.erdos_renyi.er_nm">
+<code class="descclassname">algorithms.erdos_renyi.</code><code class="descname">er_nm</code><span class="sig-paren">(</span><em>n</em>, <em>m</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/erdos_renyi.html#er_nm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.erdos_renyi.er_nm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a random graph following Erdos-Renyi G(n,m) model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> – Number of nodes</li>
+<li><strong>m</strong> – Number of edges</li>
+<li><strong>seed</strong> – Seed for generating random numbers. If it is not specified, time stamp is used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a Graph object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algorithms.erdos_renyi.er_np">
+<code class="descclassname">algorithms.erdos_renyi.</code><code class="descname">er_np</code><span class="sig-paren">(</span><em>n</em>, <em>p</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/erdos_renyi.html#er_np"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.erdos_renyi.er_np" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a random graph following Erdos-Renyi G(n, p) model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> – number of nodes</li>
+<li><strong>p</strong> – probability of an edge existing between any pair of nodes</li>
+<li><strong>seed</strong> – Seed for generating random number. If it is not specified, time stamp is used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a Graph object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-algorithms.newman_model"></span><div class="section" id="newman-model">
+<h2>Newman Model<a class="headerlink" href="#newman-model" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a functions for generating random graph
+using configuration model. In configuration model, one represents
+a graph using degree sequence. The actual graph is obtained by randomly
+connecting stubs of vertices.</p>
+<dl class="function">
+<dt id="algorithms.newman_model.configure_sequence">
+<code class="descclassname">algorithms.newman_model.</code><code class="descname">configure_sequence</code><span class="sig-paren">(</span><em>degree_seq</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/newman_model.html#configure_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.newman_model.configure_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a degree sequence, creates a random graph following configuration
+model, i.e., by connecting stubs of vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>degree_seq</strong> – the degree sequence of a graph</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A set of tuples, representing the edges.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algorithms.newman_model.degree_sequence_lognormal">
+<code class="descclassname">algorithms.newman_model.</code><code class="descname">degree_sequence_lognormal</code><span class="sig-paren">(</span><em>n</em>, <em>mu</em>, <em>sigma</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/newman_model.html#degree_sequence_lognormal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.newman_model.degree_sequence_lognormal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a degree sequnce following k-regular distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> – Number of vertices.</li>
+<li><strong>mu</strong> – The parameter mu for lognormal distribution</li>
+<li><strong>sigma</strong> – The parameter sigma for lognormal distribution</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list containing n integers representing degrees of vertices following lognormal distribution</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algorithms.newman_model.degree_sequence_regular">
+<code class="descclassname">algorithms.newman_model.</code><code class="descname">degree_sequence_regular</code><span class="sig-paren">(</span><em>n</em>, <em>k</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/newman_model.html#degree_sequence_regular"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.newman_model.degree_sequence_regular" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a degree sequnce following k-regular distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> – Number of vertices.</li>
+<li><strong>k</strong> – The parameter k for k-regular distribution</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list containing n integers representing degrees of vertices following k-regular distribution.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algorithms.newman_model.irregular_edge_count">
+<code class="descclassname">algorithms.newman_model.</code><code class="descname">irregular_edge_count</code><span class="sig-paren">(</span><em>edges</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/newman_model.html#irregular_edge_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.newman_model.irregular_edge_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes ratio of multiedges and loops and simple edges</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>edges</strong> – A list of tuples representing the set of edges of a graph.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The ratio described above.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-algorithms.watts_strogatz"></span><div class="section" id="watts-strogatz-model">
+<h2>Watts-Strogatz model<a class="headerlink" href="#watts-strogatz-model" title="Permalink to this headline">¶</a></h2>
+<p>This module contains functions for constructing
+a random graph following the Watts-Strogatz model.</p>
+<dl class="function">
+<dt id="algorithms.watts_strogatz.create_regular_ring_lattice">
+<code class="descclassname">algorithms.watts_strogatz.</code><code class="descname">create_regular_ring_lattice</code><span class="sig-paren">(</span><em>n</em>, <em>k</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/watts_strogatz.html#create_regular_ring_lattice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.watts_strogatz.create_regular_ring_lattice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a regular ring lattice graphs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> – (integer) Number of vertices.</li>
+<li><strong>k</strong> – (integer) Number of neighbours.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a Graph instance representing the ring graph.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algorithms.watts_strogatz.watts_strogatz">
+<code class="descclassname">algorithms.watts_strogatz.</code><code class="descname">watts_strogatz</code><span class="sig-paren">(</span><em>n</em>, <em>k</em>, <em>beta</em>, <em>seed=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/watts_strogatz.html#watts_strogatz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.watts_strogatz.watts_strogatz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a random graph following Watts-Strogatz model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> – (integer) Number of vertices.</li>
+<li><strong>k</strong> – (integer) Number of neighbours. Must be even.</li>
+<li><strong>beta</strong> – (float) Rewiring probability.</li>
+<li><strong>seed</strong> – Seed for the random number generator.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(Graph) a graph object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-algorithms.barabasi_albert"></span><div class="section" id="barabasi-albert-model">
+<h2>Barabasi-Albert Model<a class="headerlink" href="#barabasi-albert-model" title="Permalink to this headline">¶</a></h2>
+<p>This module contains functions for constructing
+a random graph following the Barabasi-Albert model.</p>
+<dl class="function">
+<dt id="algorithms.barabasi_albert.barabasi_albert">
+<code class="descclassname">algorithms.barabasi_albert.</code><code class="descname">barabasi_albert</code><span class="sig-paren">(</span><em>N</em>, <em>m</em>, <em>g=None</em>, <em>n=None</em>, <em>p=None</em>, <em>seed=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/barabasi_albert.html#barabasi_albert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.barabasi_albert.barabasi_albert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a random graph following Barabasi-Albert model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>N</strong> – Number of vertices.</li>
+<li><strong>m</strong> – Number of neighbors for every new node.</li>
+<li><strong>g</strong> – A starting small network. If it is None, a small network is generated using erdos renyi model.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An instance of Graph representing the created graph.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="code.html" title="previous chapter">graph.Graph</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Vladan Jovicic.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/algorithms_erdos_renyi.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

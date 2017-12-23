@@ -1,0 +1,619 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>graph &#8212; Complex Networks Algorithms 1.0.10 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.10',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for graph</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module graph</span>
+<span class="sd">============</span>
+<span class="sd">A module containing Graph class.</span>
+<span class="sd">We assume that every graph is simple, i.e.,</span>
+<span class="sd">there is no loops or multi edges.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">deque</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+
+<div class="viewcode-block" id="Graph"><a class="viewcode-back" href="../code.html#graph.Graph">[docs]</a><span class="k">class</span> <span class="nc">Graph</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph_dict</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        initializes a graph object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__graph_dict</span> <span class="o">=</span> <span class="n">graph_dict</span>
+
+<div class="viewcode-block" id="Graph.vertices"><a class="viewcode-back" href="../code.html#graph.Graph.vertices">[docs]</a>    <span class="k">def</span> <span class="nf">vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :returns: the vertices of a graph</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__graph_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Graph.number_of_vertices"><a class="viewcode-back" href="../code.html#graph.Graph.number_of_vertices">[docs]</a>    <span class="k">def</span> <span class="nf">number_of_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: returns the number of vertices</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__graph_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Graph.number_of_edges"><a class="viewcode-back" href="../code.html#graph.Graph.number_of_edges">[docs]</a>    <span class="k">def</span> <span class="nf">number_of_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: returns the number of edges</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="Graph.edges"><a class="viewcode-back" href="../code.html#graph.Graph.edges">[docs]</a>    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: a list of tuples representing the edges of the graph</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__generate_edges</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Graph.add_vertex"><a class="viewcode-back" href="../code.html#graph.Graph.add_vertex">[docs]</a>    <span class="k">def</span> <span class="nf">add_vertex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If vertex is not in self.__graph_dict, a key &quot;vertex&quot; with an empty list</span>
+<span class="sd">         as a value is added to the dictionary. Otherwise nothing has to be done.</span>
+
+<span class="sd">        :return: True if the vertex is not present in the graph, otherwise false.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">vertex</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__graph_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__graph_dict</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Graph.is_vertex_present"><a class="viewcode-back" href="../code.html#graph.Graph.is_vertex_present">[docs]</a>    <span class="k">def</span> <span class="nf">is_vertex_present</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if the vertex is already created. Returns True if it is otherwise False</span>
+
+<span class="sd">        :param vertex: name of the vertex</span>
+
+<span class="sd">        :return: true if vertex is in the graph, false otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__graph_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Graph.in_neighbourhood"><a class="viewcode-back" href="../code.html#graph.Graph.in_neighbourhood">[docs]</a>    <span class="k">def</span> <span class="nf">in_neighbourhood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param u: a vertex of the graph</span>
+<span class="sd">        :param v: a vertex of the graph</span>
+<span class="sd">        :return: Returns True if v is in the neighborhood of u.</span>
+<span class="sd">                It raises KeyError if u is not present in the graph.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">u</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Vertex is not present in the graph&quot;</span><span class="p">)</span>
+
+        <span class="n">u_neighbors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">u_neighbors</span></div>
+
+<div class="viewcode-block" id="Graph.update_neighbors"><a class="viewcode-back" href="../code.html#graph.Graph.update_neighbors">[docs]</a>    <span class="k">def</span> <span class="nf">update_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">new_neighbors</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the list of vertices of a vertex.</span>
+<span class="sd">        :param u: Vertex whose neighborhood is updated</span>
+<span class="sd">        :param new_neighbors: (list) New neighbors of u</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__graph_dict</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_neighbors</span></div>
+
+<div class="viewcode-block" id="Graph.add_edge"><a class="viewcode-back" href="../code.html#graph.Graph.add_edge">[docs]</a>    <span class="k">def</span> <span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add an edge to graph. Assumes that edge is of type set, tuple or list.</span>
+<span class="sd">        No loops or multiple edges.</span>
+
+<span class="sd">        :return: Returns true if edge is not present, otherwise false.&quot;&quot;&quot;</span>
+
+        <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">edge</span>
+        <span class="n">return_type</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_vertex_present</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_vertex</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_vertex_present</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_vertex</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__graph_dict</span><span class="p">[</span><span class="n">u</span><span class="p">]:</span>
+            <span class="n">return_type</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__graph_dict</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">u</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__graph_dict</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__graph_dict</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">return_type</span></div>
+
+<div class="viewcode-block" id="Graph.add_edges"><a class="viewcode-back" href="../code.html#graph.Graph.add_edges">[docs]</a>    <span class="k">def</span> <span class="nf">add_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edges</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a list of edges to graph.</span>
+
+<span class="sd">        :param edges: a list of edges to be added</span>
+<span class="sd">        :return: void</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__generate_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A static method generating the edges of the graph &quot;graph&quot;. Edges \</span>
+<span class="sd">        are represented as sets two vertices, with no loops.</span>
+<span class="sd">        :return: a list of tuples representing the edges</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">edges</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">():</span>
+            <span class="n">new_edges</span> <span class="o">=</span> <span class="p">[(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">edges</span> <span class="ow">and</span> <span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">u</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">]</span>
+            <span class="n">edges</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_edges</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Graph.vertex_degree"><a class="viewcode-back" href="../code.html#graph.Graph.vertex_degree">[docs]</a>    <span class="k">def</span> <span class="nf">vertex_degree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertex</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the degree of the vertex.</span>
+
+<span class="sd">        :param vertex: vertex for which degree is computed</span>
+<span class="sd">        :return: return the degree if the vertex is present, otherwise raises keyerror</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_vertex_present</span><span class="p">(</span><span class="n">vertex</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__graph_dict</span><span class="p">[</span><span class="n">vertex</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Vertex is not in the graph&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Graph.vertices_degree_list"><a class="viewcode-back" href="../code.html#graph.Graph.vertices_degree_list">[docs]</a>    <span class="k">def</span> <span class="nf">vertices_degree_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: returns a list of degrees of vertices</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vertex_degree</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">()]</span>
+
+        <span class="k">return</span> <span class="n">degrees</span></div>
+
+<div class="viewcode-block" id="Graph.find_isolated_vertices"><a class="viewcode-back" href="../code.html#graph.Graph.find_isolated_vertices">[docs]</a>    <span class="k">def</span> <span class="nf">find_isolated_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: a list of vertices of degree 0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">isolated_vertices</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex_degree</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">isolated_vertices</span></div>
+
+<div class="viewcode-block" id="Graph.density"><a class="viewcode-back" href="../code.html#graph.Graph.density">[docs]</a>    <span class="k">def</span> <span class="nf">density</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Density is ratio of number of edges and number of edges that</span>
+<span class="sd">        complete graph has with the same number of vertices.</span>
+
+<span class="sd">        :return: returns the density of the graph</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">num_of_edges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span>
+        <span class="n">num_of_vertices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_vertices</span><span class="p">()</span>
+
+        <span class="n">poss_num_of_edges</span> <span class="o">=</span> <span class="n">num_of_vertices</span> <span class="o">*</span> <span class="p">(</span><span class="n">num_of_vertices</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+        <span class="k">if</span> <span class="n">poss_num_of_edges</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">num_of_edges</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">poss_num_of_edges</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Graph.degree_sequence"><a class="viewcode-back" href="../code.html#graph.Graph.degree_sequence">[docs]</a>    <span class="k">def</span> <span class="nf">degree_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Degree sequence is a list of all degrees in non-increasing order.</span>
+
+<span class="sd">        :return: a degree sequence of the graph</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">degree_seq</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices_degree_list</span><span class="p">(),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">degree_seq</span></div>
+
+<div class="viewcode-block" id="Graph.erdos_gallai"><a class="viewcode-back" href="../code.html#graph.Graph.erdos_gallai">[docs]</a>    <span class="k">def</span> <span class="nf">erdos_gallai</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">degree_seq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Erdos Gallai theorem states that a non-increasing</span>
+<span class="sd">        sequence of n numbers d_i is a degree sequence of a simple graph</span>
+<span class="sd">        if and only if the sum of sequence is even and the condition</span>
+<span class="sd">        $\sum_{i=1}^{k}{d_i} \leq k(k-1) + \sum_{i=k+1}^n \min(d_i, k) \text{ for all } k$</span>
+<span class="sd">        This can be implemented in time $O(n)$. However, the current implementation</span>
+<span class="sd">        requires O(n^2) time.</span>
+
+<span class="sd">        :param degree_seq: If it is None, then the degree sequence of the graph is used.</span>
+<span class="sd">        :return: True if the degree sequence satisfies both conditions and False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">degree_seq</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">degree_seq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">degree_sequence</span><span class="p">()</span>
+            <span class="n">num_vertices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_vertices</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">num_vertices</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">degree_seq</span><span class="p">)</span>
+            <span class="n">degree_seq</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">degree_seq</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># first condition is satisfied by default</span>
+
+        <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">degree_seq</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># second condition</span>
+
+        <span class="k">def</span> <span class="nf">compute_right_sum</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+            <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">degree_seq</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]]</span>
+            <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+
+        <span class="n">left_sum</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_vertices</span><span class="p">):</span>
+            <span class="n">left_sum</span> <span class="o">=</span> <span class="n">left_sum</span> <span class="o">+</span> <span class="n">degree_seq</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">right_sum</span> <span class="o">=</span> <span class="n">compute_right_sum</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">left_sum</span> <span class="o">&gt;</span> <span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">right_sum</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Graph.global_clustering_coefficient"><a class="viewcode-back" href="../code.html#graph.Graph.global_clustering_coefficient">[docs]</a>    <span class="k">def</span> <span class="nf">global_clustering_coefficient</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Global clustering coefficient is the ratio of number of triangles and</span>
+<span class="sd">        number of connected triplets of vertices</span>
+
+<span class="sd">        :return: float, clustering coefficient of the graph</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">num_closed_triplets</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">num_conn_triplets</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">():</span>
+            <span class="c1"># center it at vertex u</span>
+            <span class="n">tmp_conn_trplets</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">tmp_closed_triplets</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="c1"># check if there is a closed or conn</span>
+            <span class="c1"># triplet centered at u</span>
+            <span class="n">u_neighbors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">u_neighbors</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">u_neighbors</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_neighbourhood</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+                        <span class="c1"># this is a closed triplet</span>
+                        <span class="n">tmp_closed_triplets</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                    <span class="n">num_conn_triplets</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">num_closed_triplets</span> <span class="o">+=</span> <span class="n">tmp_closed_triplets</span>
+            <span class="n">num_conn_triplets</span> <span class="o">+=</span> <span class="n">tmp_conn_trplets</span>
+
+        <span class="k">if</span> <span class="n">num_conn_triplets</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">num_closed_triplets</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">num_conn_triplets</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Graph.get_neighbors"><a class="viewcode-back" href="../code.html#graph.Graph.get_neighbors">[docs]</a>    <span class="k">def</span> <span class="nf">get_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param u: vertex in the graph</span>
+<span class="sd">        :return: a list of neighbors of u</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_vertex_present</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Vertex is not in the graph&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__graph_dict</span><span class="p">[</span><span class="n">u</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Graph.connected_components"><a class="viewcode-back" href="../code.html#graph.Graph.connected_components">[docs]</a>    <span class="k">def</span> <span class="nf">connected_components</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes connected components.</span>
+
+<span class="sd">        :return: a list of lists, each containing vertices from the same conn component.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_vertices</span><span class="p">()</span>
+        <span class="n">all_comps</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1">#</span>
+
+        <span class="c1"># keep all unvistied nodes in a set</span>
+        <span class="n">all_nodes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">())</span>
+
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_nodes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># while there is an unvisited node</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">all_nodes</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+            <span class="n">curr_component</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="p">}</span>  <span class="c1"># all nodes belonging to this component</span>
+            <span class="n">bfs_queue</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="p">}</span>  <span class="c1"># use set (our favourite data struct) as a bfs queue</span>
+
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">bfs_queue</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># while there is a node in the queue</span>
+                <span class="n">u</span> <span class="o">=</span> <span class="n">bfs_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+                <span class="c1"># get all my neighbors</span>
+                <span class="c1"># keep it in a set in order to make operations faster</span>
+                <span class="n">u_neighbors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
+
+                <span class="c1"># remove those vertices I already saw</span>
+                <span class="n">u_neighbors</span><span class="o">.</span><span class="n">difference_update</span><span class="p">(</span><span class="n">curr_component</span><span class="p">)</span>
+
+                <span class="c1"># update current component</span>
+                <span class="n">curr_component</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">u_neighbors</span><span class="p">)</span>
+
+                <span class="c1"># update set of visited nodes</span>
+                <span class="n">all_nodes</span><span class="o">.</span><span class="n">difference_update</span><span class="p">(</span><span class="n">u_neighbors</span><span class="p">)</span>
+
+                <span class="c1"># update queue</span>
+                <span class="n">bfs_queue</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">u_neighbors</span><span class="p">)</span>
+
+            <span class="n">all_comps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">curr_component</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">all_comps</span></div>
+
+<div class="viewcode-block" id="Graph.connected_component"><a class="viewcode-back" href="../code.html#graph.Graph.connected_component">[docs]</a>    <span class="k">def</span> <span class="nf">connected_component</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the number of connected components and</span>
+<span class="sd">        the size of each componenent</span>
+
+<span class="sd">        :return: a pair: thi first entry is the number of components, the second</span>
+<span class="sd">                        is a list constaining sizes of components</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">components</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected_components</span><span class="p">()</span>
+        <span class="n">number_of_comps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
+
+        <span class="n">sizes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">comp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">components</span><span class="p">):</span>
+            <span class="n">sizes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">comp</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">number_of_comps</span><span class="p">,</span> <span class="n">sizes</span></div>
+
+<div class="viewcode-block" id="Graph.shortest_path"><a class="viewcode-back" href="../code.html#graph.Graph.shortest_path">[docs]</a>    <span class="k">def</span> <span class="nf">shortest_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the shortest path between u and v.</span>
+<span class="sd">        If both of them are None, then computes the shorthest path</span>
+<span class="sd">        between all pair of vertices.</span>
+<span class="sd">        If u is not None and v is None, then it computes the shortest path</span>
+<span class="sd">        between u and all other vertices.</span>
+<span class="sd">        Finally, if both of them are not None, it computes the shorthest path</span>
+<span class="sd">        between u and v.</span>
+
+<span class="sd">        :param u: the source vertex</span>
+<span class="sd">        :param v: the end vertex</span>
+<span class="sd">        :return: the shortest path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># now we need a real queue :(</span>
+        <span class="k">if</span> <span class="n">u</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="p">{</span><span class="n">u</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">shortest_path</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">()}</span>
+
+        <span class="n">dist</span><span class="p">,</span> <span class="n">arg_u</span><span class="p">,</span> <span class="n">arg_v</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span>
+
+        <span class="n">u</span> <span class="o">=</span> <span class="n">u</span> <span class="k">if</span> <span class="n">u</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">v</span>  <span class="c1"># love python</span>
+        <span class="n">queue</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([</span><span class="n">u</span><span class="p">])</span>
+
+        <span class="c1"># distance to me is 0</span>
+        <span class="n">dist</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># take the best so far</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+
+            <span class="n">u_neighbors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+            <span class="n">updated</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">dist</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">u_neighbors</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dist</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+
+            <span class="c1"># append the queue</span>
+            <span class="n">queue</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">updated</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+            <span class="c1"># update distances</span>
+            <span class="n">dist</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">updated</span><span class="p">)</span>
+
+        <span class="c1"># nodes which are not in the list are not in the</span>
+        <span class="c1"># same component as u</span>
+
+        <span class="n">non_reachable</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dist</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+
+        <span class="c1"># update for non_reachable</span>
+        <span class="n">dist</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">non_reachable</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">arg_u</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">arg_v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">dist</span><span class="p">[</span><span class="n">arg_v</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">dist</span></div>
+
+<div class="viewcode-block" id="Graph.diameter"><a class="viewcode-back" href="../code.html#graph.Graph.diameter">[docs]</a>    <span class="k">def</span> <span class="nf">diameter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the diameter of the graph.</span>
+
+<span class="sd">        :return: The maximum of distances between any pair</span>
+<span class="sd">                of nodes or infinity if the graph is not connected</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shortest_path</span><span class="p">()</span>
+
+        <span class="c1"># a temporary function to compute the largest distance</span>
+        <span class="c1"># starting at u</span>
+        <span class="k">def</span> <span class="nf">u_diameter</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+
+            <span class="n">values</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="c1"># compute the largest distances from every vertex</span>
+        <span class="n">comp_diams</span> <span class="o">=</span> <span class="p">[</span><span class="n">u_diameter</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">()]</span>
+
+        <span class="c1"># finally compute the diameter</span>
+        <span class="n">diam</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">comp_diams</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">max</span><span class="p">(</span><span class="n">comp_diams</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">diam</span></div>
+
+<div class="viewcode-block" id="Graph.biggest_component_diameter"><a class="viewcode-back" href="../code.html#graph.Graph.biggest_component_diameter">[docs]</a>    <span class="k">def</span> <span class="nf">biggest_component_diameter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: the diameter of the biggest component</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">all_components</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected_components</span><span class="p">()</span>
+
+        <span class="c1"># get components and their sizes</span>
+        <span class="n">component_sizes</span> <span class="o">=</span> <span class="p">[(</span><span class="nb">len</span><span class="p">(</span><span class="n">comp</span><span class="p">),</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">comp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">all_components</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">component_sizes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="n">size_of_largest</span><span class="p">,</span> <span class="n">idx_largest</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">component_sizes</span><span class="p">)</span>
+
+        <span class="c1"># now it is guaranteed that there is at least one vertex</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shortest_path</span><span class="p">()</span>
+
+        <span class="c1"># map every vertex from the largest component to</span>
+        <span class="c1"># largest distance starting at that vertex</span>
+
+        <span class="k">def</span> <span class="nf">u_diameter</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">dist</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">val</span><span class="p">)]</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="n">diam_candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">u_diameter</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">all_components</span><span class="p">[</span><span class="n">idx_largest</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">diam_candidates</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Graph.spanning_tree"><a class="viewcode-back" href="../code.html#graph.Graph.spanning_tree">[docs]</a>    <span class="k">def</span> <span class="nf">spanning_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the spanning tree of the graph using Kruskal algorithm</span>
+<span class="sd">        and union - find. Complexity: $O(m\log*(n))$</span>
+
+<span class="sd">        :return: a list of tuples representing edges of the tree</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">parent_and_rank</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="p">:</span> <span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">()}</span>
+        <span class="n">s_tree</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># edges of resulting tree</span>
+
+        <span class="k">def</span> <span class="nf">find_parent</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">parent_and_rank</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">:</span>
+                <span class="n">parent_and_rank</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">find_parent</span><span class="p">(</span><span class="n">parent_and_rank</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">parent_and_rank</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+            <span class="n">uroot</span> <span class="o">=</span> <span class="n">find_parent</span><span class="p">(</span><span class="n">u</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">vroot</span> <span class="o">=</span> <span class="n">find_parent</span><span class="p">(</span><span class="n">v</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">uroot</span> <span class="o">==</span> <span class="n">vroot</span><span class="p">:</span>  <span class="c1"># this edge create a cycle</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># otherwise, add this edge to the tree and join components</span>
+            <span class="n">s_tree</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+
+            <span class="n">uroot_rank</span> <span class="o">=</span> <span class="n">parent_and_rank</span><span class="p">[</span><span class="n">uroot</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">vroot_rank</span> <span class="o">=</span> <span class="n">parent_and_rank</span><span class="p">[</span><span class="n">vroot</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">uroot_rank</span> <span class="o">&gt;</span> <span class="n">vroot_rank</span><span class="p">:</span>
+                <span class="n">parent_and_rank</span><span class="p">[</span><span class="n">vroot</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">uroot</span><span class="p">,</span> <span class="n">parent_and_rank</span><span class="p">[</span><span class="n">uroot</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="k">elif</span> <span class="n">uroot_rank</span> <span class="o">&lt;</span> <span class="n">vroot_rank</span><span class="p">:</span>
+                <span class="n">parent_and_rank</span><span class="p">[</span><span class="n">uroot</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">vroot</span><span class="p">,</span> <span class="n">parent_and_rank</span><span class="p">[</span><span class="n">vroot</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">parent_and_rank</span><span class="p">[</span><span class="n">vroot</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">uroot</span><span class="p">,</span> <span class="n">parent_and_rank</span><span class="p">[</span><span class="n">uroot</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="n">parent_and_rank</span><span class="p">[</span><span class="n">uroot</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">s_tree</span></div>
+
+<div class="viewcode-block" id="Graph.read_from_file"><a class="viewcode-back" href="../code.html#graph.Graph.read_from_file">[docs]</a>    <span class="k">def</span> <span class="nf">read_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads graph from a file.</span>
+
+<span class="sd">        :param filename: path to the file</span>
+<span class="sd">        :return: True if the graph is read successfully. If</span>
+<span class="sd">                filename is not specified or it does not exist, ValueError</span>
+<span class="sd">                and IOError are raised (respectively).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Filename is not specified&quot;</span><span class="p">)</span>
+
+        <span class="n">input_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">str_edge</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">input_file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()):</span>
+            <span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">str_edge</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">((</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+
+        <span class="n">input_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;f&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;f&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;d&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;e&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;f&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;g&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">read_from_file</span><span class="p">(</span><span class="s2">&quot;../test_data/graph_100n_1000m.txt&quot;</span><span class="p">)</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">shortest_path</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">diameter</span><span class="p">())</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Vladan Jovicic.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

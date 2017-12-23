@@ -1,0 +1,399 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Assignment 2 &#8212; Complex Networks Algorithms 1.0.10 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.10',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="graph.Graph" href="code.html" />
+    <link rel="prev" title="Project Summary" href="project.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="assignment-2">
+<h1>Assignment 2<a class="headerlink" href="#assignment-2" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="exercise-1-2">
+<h2>Exercise 1.2<a class="headerlink" href="#exercise-1-2" title="Permalink to this headline">¶</a></h2>
+<p>The aim of this exercise is to show that graph generation methods obey
+the theoretical degree distribution: P(k) =
+C_k<sup>{n-1}p</sup>k(1-p)^{n-k-1}.</p>
+<p>In order to do that, we will do the following experiment - Generate a
+random graph following Erdos-Renyi G(n=1000, p=0.65) model - We consider
+all degrees and count how many times each degree appear - We obtain a
+sample of size n for which we assume that it was generate by a binomial
+distribution - We plot it against binomial distribution with parameters
+n and p</p>
+<div class="section" id="generating-sample">
+<h3>Generating sample<a class="headerlink" href="#generating-sample" title="Permalink to this headline">¶</a></h3>
+<div class="code ipython2 highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">collections</span> <span class="k">as</span> <span class="nn">collcs</span>
+<span class="c1"># append the path so that modules can be properly imported</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../src/&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">graph</span>
+<span class="kn">import</span> <span class="nn">algorithms.erdos_renyi</span> <span class="k">as</span> <span class="nn">er</span>
+<span class="kn">import</span> <span class="nn">algorithms.newman_model</span> <span class="k">as</span> <span class="nn">nm</span>
+
+<span class="n">reload</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+<span class="n">reload</span><span class="p">(</span><span class="n">er</span><span class="p">)</span>
+<span class="n">reload</span><span class="p">(</span><span class="n">nm</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">module</span> <span class="s1">&#39;algorithms.newman_model&#39;</span> <span class="kn">from</span> <span class="s1">&#39;../src/algorithms/newman_model.pyc&#39;</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<div class="code ipython2 highlight-default"><div class="highlight"><pre><span></span><span class="c1"># generate a random graph having 1000 vertices</span>
+<span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mi">12345</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">er_np</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span><span class="o">*</span><span class="n">p</span>
+<span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+<span class="n">G1</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">er_nm</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="processing-sample">
+<h3>Processing sample<a class="headerlink" href="#processing-sample" title="Permalink to this headline">¶</a></h3>
+<p>Now we will count how many times each number from the set
+<span class="math">\(\{1,\dots,n-1\}\)</span> appears.</p>
+<div class="code ipython2 highlight-default"><div class="highlight"><pre><span></span><span class="n">g_degree_sequence</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">degree_sequence</span><span class="p">()</span>
+<span class="n">g1_degree_sequence</span> <span class="o">=</span> <span class="n">G1</span><span class="o">.</span><span class="n">degree_sequence</span><span class="p">()</span>
+<span class="n">num_counter</span><span class="p">,</span> <span class="n">num_counterG1</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">num_counter</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">num_counterG1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">g_degree_sequence</span><span class="p">,</span> <span class="n">g1_degree_sequence</span><span class="p">):</span>
+    <span class="n">num_counter</span><span class="p">[</span><span class="n">d1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">num_counterG1</span><span class="p">[</span><span class="n">d2</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="plotting">
+<h3>Plotting<a class="headerlink" href="#plotting" title="Permalink to this headline">¶</a></h3>
+<p>We will now plot observed degree distribution and binomial distribution.</p>
+<p><em>Note</em>: In the next block of code, we will use python modules <strong>scipy,
+numpy</strong> and <strong>matplotlib</strong>.</p>
+<div class="code ipython2 highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stat</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">def</span> <span class="nf">plot_test</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">degree_sequence</span><span class="p">,</span> <span class="n">counter</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Plot&quot;</span><span class="p">):</span>
+    <span class="c1"># plot setup</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Binomial pmf with parameters n-1, p</span>
+    <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">y_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">stat</span><span class="o">.</span><span class="n">binom</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)])</span> <span class="c1">#stat.binom.pmf(x_axis, n-1, p)</span>
+    <span class="c1"># display degree distribution and binomial pmf</span>
+    <span class="c1">#print(&quot;deg seq&quot;)</span>
+    <span class="c1">#print(degree_sequence)</span>
+    <span class="n">my_counter</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">patches</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">degree_sequence</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">,</span> <span class="n">normed</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">y_axis</span><span class="p">,</span> <span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># G(n, p) model</span>
+<span class="n">plot_test</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">g_degree_sequence</span><span class="p">,</span> <span class="n">num_counter</span><span class="p">,</span>
+          <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Observed degree distribution and binomial distribution: n=</span><span class="si">%d</span><span class="s2">, p=</span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;******************Second test*******************&quot;</span><span class="p">)</span>
+<span class="n">num_counterG1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">plot_test</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">g1_degree_sequence</span><span class="p">,</span> <span class="n">num_counterG1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Plot1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/output_6_0.png" src="_images/output_6_0.png" />
+<pre class="literal-block">
+<strong>****************Second test*****************</strong>
+</pre>
+<img alt="_images/output_6_2.png" src="_images/output_6_2.png" />
+<p>In the above figures, first image represents observed degree
+distribution of random graph <span class="math">\(G(n, p)\)</span> and the binomial pmf with
+parameters <span class="math">\(n\)</span> and <span class="math">\(p\)</span>. The second image describes observed
+degree distribution of random graph <span class="math">\(G(n, m)\)</span> with
+<span class="math">\(m = \frac{1}{2}pn(n-1)\)</span> and the binomial pmf with parameters
+<span class="math">\(n\)</span> and <span class="math">\(p\)</span>.</p>
+<p>We can see that in both cases, observed degree distribution looks
+similar to binomial pmf.</p>
+</div>
+</div>
+<div class="section" id="exercise-2">
+<h2>Exercise 2<a class="headerlink" href="#exercise-2" title="Permalink to this headline">¶</a></h2>
+<p>In this exercise, we want to demonstrate the following: - if
+<span class="math">\(np &lt; 1\)</span>, a graph in <span class="math">\(G_{n,p}\)</span> will almost surely have no
+connected components of size larger than <span class="math">\(O(\log n)\)</span> - if
+<span class="math">\(np = 1\)</span>, a graph in <span class="math">\(G_{n,p}\)</span> will almost surely have a
+largest component whose size is <span class="math">\(O(n^\frac{2}{3})\)</span>, - if
+<span class="math">\(np \to c &gt; 1\)</span>, where c is a constant, then a graph in
+<span class="math">\(G_{n,p}\)</span> will almost surely have a unique giant component
+containing a positive fraction of the vertices. No other component will
+contain more than <span class="math">\(O(\log n)\)</span> vertices. Furthermore, - if
+<span class="math">\(np &lt; (1 − \epsilon)\log n\)</span>, a graph in <span class="math">\(G_{n,p}\)</span> will
+almost surely contain isolated vertices, and - if
+<span class="math">\(np &gt; (1 + \epsilon)\log n\)</span>, a graph in <span class="math">\(G_{n,p}\)</span> will
+almost surely be connected.</p>
+<p>To do so, we will do the following experiments. - We will generate
+random graphs <span class="math">\(G(n, p)\)</span> with <span class="math">\(n \in [100, 200]\)</span> and
+<span class="math">\(p \in [0.003, 0.04]\)</span>. - For each graph we will compute the size
+of the largest component - Use color map to visualize the observed sizes</p>
+<div class="code ipython2 highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="k">import</span> <span class="n">Axes3D</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">cm</span>
+<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="k">import</span> <span class="n">LinearLocator</span><span class="p">,</span> <span class="n">FormatStrFormatter</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">def</span> <span class="nf">component_experiment</span><span class="p">((</span><span class="n">n_l</span><span class="p">,</span> <span class="n">n_r</span><span class="p">),</span> <span class="p">(</span><span class="n">p_l</span><span class="p">,</span> <span class="n">p_r</span><span class="p">),</span> <span class="n">seeds</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+    <span class="c1"># n_l, n_r bounds for n</span>
+    <span class="c1"># p_l, p_r bounds for probability</span>
+    <span class="c1"># s sample size</span>
+    <span class="c1"># generate s graphs from G(n,p)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">n_r</span> <span class="o">-</span> <span class="n">n_l</span> <span class="c1"># sample size</span>
+    <span class="k">if</span> <span class="n">seeds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">seeds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="mi">2000000</span><span class="p">,</span> <span class="n">s</span><span class="o">*</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
+    <span class="c1"># compute</span>
+
+    <span class="n">step_p</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">p_r</span> <span class="o">-</span> <span class="n">p_l</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_l</span><span class="p">,</span> <span class="n">n_r</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">p_l</span><span class="p">,</span> <span class="n">p_r</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step_p</span><span class="p">)</span>
+
+    <span class="n">N</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">P</span><span class="p">)</span>
+    <span class="n">CC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
+    <span class="c1"># r_graphs = []</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="c1"># r_graphs.append([])</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">er_np</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]),</span> <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">seed</span><span class="o">=</span><span class="n">seeds</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+            <span class="c1"># r_graphs[-1].append(G)</span>
+            <span class="n">cc_sizes</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">connected_component</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="c1"># get the largest</span>
+            <span class="n">largest_comp_size</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cc_sizes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">max</span><span class="p">(</span><span class="n">cc_sizes</span><span class="p">)</span>
+            <span class="c1"># print(&quot;Largest comp of graph (%d, %f) is %d&quot; % (int(N[i, j]), P[i, j], largest_comp_size))</span>
+            <span class="n">CC</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">largest_comp_size</span>
+
+    <span class="n">plot3D</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">CC</span><span class="p">)</span>
+
+
+
+<span class="k">def</span> <span class="nf">plot3D</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">):</span>
+    <span class="c1"># plt.figure(num=None, figsize=(15, 6), dpi=80, facecolor=&#39;w&#39;, edgecolor=&#39;k&#39;)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">mapa</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">coolwarm</span><span class="p">,</span> <span class="n">antialiased</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">mapa</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="c1"># plot a few lines</span>
+    <span class="n">tX</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">n_times_p</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">prod</span> <span class="ow">in</span> <span class="n">n_times_p</span><span class="p">:</span>
+        <span class="n">line</span><span class="p">,</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tX</span><span class="p">,</span> <span class="n">prod</span> <span class="o">/</span> <span class="n">tX</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;n*p = </span><span class="si">%f</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">prod</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">component_experiment</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.003</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">))</span>
+</pre></div>
+</div>
+<img alt="_images/output_9_0.png" src="_images/output_9_0.png" />
+<p>In the above graph, <span class="math">\(x\)</span>-axis represents number of nodes our graph
+has, <span class="math">\(y\)</span>-axis is probability <span class="math">\(p\)</span>. We plot different lines as
+a function of <span class="math">\(n\)</span> and <span class="math">\(p\)</span>. More precisely, we plot 7 lines
+with <span class="math">\(n\cdot p \in \{.7, .8, .9, 1.0, 1.3, 1.7, 2.0\}\)</span>. We can see
+that when <span class="math">\(n\cdot p &lt; 1\)</span>, the size of the largest component is
+below 20 (with a few exceptions). This confirms that if <span class="math">\(np &lt; 1\)</span>
+then the size of the largest component belongs to <span class="math">\(O(\log n)\)</span>.
+From the other side, if <span class="math">\(np = 1\)</span> (the red line), we see that the
+size of the largest component is between <span class="math">\(20\)</span> and <span class="math">\(60\)</span>.
+Again, this is a good evidence that the size of the largest component is
+of order <span class="math">\(O(n^{\frac{2}{3}})\)</span>.</p>
+<p>One of the things that can be seen in the above plot is that there is a
+sharp threshold for the size of largest component. Although it is not
+true that the threshold is <span class="math">\(np = 1\)</span>, we can see that the threshold
+line satisfies <span class="math">\(np = c\)</span>. Thus, increasing <span class="math">\(n\)</span> we should
+observe that <span class="math">\(np=1\)</span> is the threshold line.</p>
+<p>Finally, let us try to estimate number of isolated vertices. Similarly
+as above, we will do: - generate random graphs <span class="math">\(G(n, p)\)</span> for
+<span class="math">\(n \in [1000, 1010]\)</span> and <span class="math">\(p \in [0.0001, 0.03]\)</span>, - compute
+the number of isolated vertices, - use color map to represent the
+observed numbers and plot it against <span class="math">\((1+\epsilon)\log(n)\)</span> for
+<span class="math">\(\epsilon \in [-0.2, 0.15]\)</span>.</p>
+<div class="code ipython2 highlight-default"><div class="highlight"><pre><span></span><span class="c1"># number of isolated vertices when np in [(1-e)logn, (1+e)logn] for n in [100, 200] and p in [0.02, 0.5]</span>
+<span class="k">def</span> <span class="nf">isolated_vertices_experiment</span><span class="p">((</span><span class="n">n_l</span><span class="p">,</span> <span class="n">n_r</span><span class="p">),</span> <span class="p">(</span><span class="n">p_l</span><span class="p">,</span> <span class="n">p_r</span><span class="p">),</span> <span class="n">epsilon</span><span class="p">):</span>
+    <span class="n">p_size</span> <span class="o">=</span> <span class="n">n_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_r</span> <span class="o">-</span> <span class="n">n_l</span><span class="p">)</span>
+    <span class="n">N</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">n_l</span><span class="p">,</span> <span class="n">n_r</span><span class="p">,</span> <span class="n">n_size</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">p_l</span><span class="p">,</span> <span class="n">p_r</span><span class="p">,</span> <span class="n">p_size</span><span class="p">)</span>
+
+    <span class="n">N</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">P</span><span class="p">)</span>
+    <span class="n">CC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_size</span><span class="p">,</span> <span class="n">p_size</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_size</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p_size</span><span class="p">):</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">er_np</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]),</span> <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+            <span class="n">isolated_vertices</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">find_isolated_vertices</span><span class="p">()</span>
+            <span class="n">CC</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">isolated_vertices</span><span class="p">)</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">mapa</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">CC</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">coolwarm</span><span class="p">,</span> <span class="n">antialiased</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">mapa</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">N</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">prod</span> <span class="ow">in</span> <span class="n">epsilon</span><span class="p">:</span>
+        <span class="n">line</span><span class="p">,</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="n">prod</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">X</span><span class="p">))</span><span class="o">/</span><span class="n">X</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;n*p = </span><span class="si">%f</span><span class="s2">log(n)&quot;</span><span class="o">%</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">prod</span><span class="p">))</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;n&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">n_l</span><span class="p">,</span> <span class="n">n_r</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1010</span>
+<span class="n">p_l</span><span class="p">,</span> <span class="n">p_r</span> <span class="o">=</span> <span class="mf">0.0001</span><span class="p">,</span> <span class="mf">0.03</span>
+<span class="n">epsilon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="c1"># run the experiment</span>
+<span class="n">isolated_vertices_experiment</span><span class="p">((</span><span class="n">n_l</span><span class="p">,</span> <span class="n">n_r</span><span class="p">),</span> <span class="p">(</span><span class="n">p_l</span><span class="p">,</span> <span class="n">p_r</span><span class="p">),</span> <span class="n">epsilon</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/output_11_0.png" src="_images/output_11_0.png" />
+<p>The above plot represents the number of isolated vertices as a function
+of <span class="math">\(n\)</span> and <span class="math">\(p\)</span>. We also see 7 lines representing equations
+<span class="math">\(n\cdot p = (1+\epsilon)\log(n)\)</span> for
+<span class="math">\(\epsilon \in [-0.2, 0.15]\)</span>.</p>
+<p>We can observe the follwoing: - when <span class="math">\(n\cdot p &gt; 1.15\log(n)\)</span>
+(everything above the pink line), there is no isolated vertices - when
+<span class="math">\(n\cdot p &lt; 0.8\log(n)\)</span> (everything below the blue line), we see
+that almost all graphs have at least one isolated vertex</p>
+</div>
+<div class="section" id="exercise-3">
+<h2>Exercise 3<a class="headerlink" href="#exercise-3" title="Permalink to this headline">¶</a></h2>
+<p>In this exercise, we want to ilustrate the relationship between network
+size <span class="math">\(n\)</span>, and the fraction of multiple edges and loops resulting
+from the random attachment of pairs of stubs. To do that we will firstly
+generate random graphs following configuration model with different
+values for parameters <span class="math">\(n \in [60, 90]\)</span> and <span class="math">\(k \in [50, 80]\)</span>.
+Then, for every <span class="math">\(n\)</span> we compute the average ratio obtained from
+different values of <span class="math">\(k\)</span>. Then, we plot the observed average ratio
+as a function of <span class="math">\(n\)</span>.</p>
+<div class="code ipython2 highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">cm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">algorithms.newman_model</span> <span class="k">as</span> <span class="nn">nm</span>
+
+<span class="n">reload</span><span class="p">(</span><span class="n">nm</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">ratio_experiment</span><span class="p">((</span><span class="n">n_l</span><span class="p">,</span> <span class="n">n_r</span><span class="p">),</span> <span class="p">(</span><span class="n">k_l</span><span class="p">,</span> <span class="n">k_r</span><span class="p">)):</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">n_r</span> <span class="o">-</span> <span class="n">n_l</span>
+    <span class="n">k_size</span> <span class="o">=</span> <span class="n">k_r</span> <span class="o">-</span> <span class="n">k_l</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">n_l</span><span class="p">,</span> <span class="n">n_r</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">k_l</span><span class="p">,</span> <span class="n">k_r</span><span class="p">,</span> <span class="n">k_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="n">NN</span><span class="p">,</span> <span class="n">KK</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
+    <span class="n">ratio</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">#np.zeros((size, k_size))</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
+        <span class="n">current_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k_size</span><span class="p">):</span>
+            <span class="n">degree_sequence</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">degree_sequence_regular</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">NN</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">KK</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">k</span><span class="p">]))</span>
+            <span class="n">edges</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">configure_sequence</span><span class="p">(</span><span class="n">degree_sequence</span><span class="p">)</span>
+            <span class="n">tmp_ratio</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">irregular_edge_count</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+            <span class="n">current_sum</span> <span class="o">+=</span> <span class="n">tmp_ratio</span>
+        <span class="n">ratio</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_sum</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">k_size</span><span class="p">))</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;n&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;ratio&quot;</span><span class="p">)</span>
+    <span class="n">line</span><span class="p">,</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ratio</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ratio(n)&quot;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="n">line</span><span class="p">])</span>
+    <span class="c1">#mapa = plt.pcolor(NN, KK, ratio, cmap=cm.coolwarm, antialiased=False)</span>
+    <span class="c1">#fig.colorbar(mapa, shrink=0.5, aspect=5)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">ratio_experiment</span><span class="p">((</span><span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">),</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">80</span><span class="p">))</span>
+</pre></div>
+</div>
+<img alt="_images/output_14_0.png" src="_images/output_14_0.png" />
+<p>In the above graph, we represent the average value of ratio as a
+function of <span class="math">\(n\)</span>. The above graph tells us that the average ratio
+is linear in terms of n.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="project.html" title="previous chapter">Project Summary</a></li>
+      <li>Next: <a href="code.html" title="next chapter">graph.Graph</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Vladan Jovicic.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/assignment2.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

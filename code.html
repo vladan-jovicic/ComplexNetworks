@@ -1,0 +1,489 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>graph.Graph &#8212; Complex Networks Algorithms 1.0.10 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.10',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Algorithms" href="algorithms_erdos_renyi.html" />
+    <link rel="prev" title="Assignment 2" href="assignment2.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-graph">
+<span id="graph-graph"></span><h1>graph.Graph<a class="headerlink" href="#module-graph" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>Module graph<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>A module containing Graph class.
+We assume that every graph is simple, i.e.,
+there is no loops or multi edges.</p>
+</div>
+<dl class="class">
+<dt id="graph.Graph">
+<em class="property">class </em><code class="descclassname">graph.</code><code class="descname">Graph</code><span class="sig-paren">(</span><em>graph_dict={}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="graph.Graph.add_edge">
+<code class="descname">add_edge</code><span class="sig-paren">(</span><em>edge</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.add_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.add_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an edge to graph. Assumes that edge is of type set, tuple or list.
+No loops or multiple edges.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns true if edge is not present, otherwise false.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.add_edges">
+<code class="descname">add_edges</code><span class="sig-paren">(</span><em>edges</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.add_edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.add_edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a list of edges to graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>edges</strong> – a list of edges to be added</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">void</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.add_vertex">
+<code class="descname">add_vertex</code><span class="sig-paren">(</span><em>vertex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.add_vertex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.add_vertex" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>If vertex is not in self.__graph_dict, a key “vertex” with an empty list</dt>
+<dd>as a value is added to the dictionary. Otherwise nothing has to be done.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the vertex is not present in the graph, otherwise false.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.biggest_component_diameter">
+<code class="descname">biggest_component_diameter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.biggest_component_diameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.biggest_component_diameter" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the diameter of the biggest component</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.connected_component">
+<code class="descname">connected_component</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.connected_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.connected_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the number of connected components and
+the size of each componenent</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a pair: thi first entry is the number of components, the second
+is a list constaining sizes of components</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.connected_components">
+<code class="descname">connected_components</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.connected_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.connected_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes connected components.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of lists, each containing vertices from the same conn component.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.degree_sequence">
+<code class="descname">degree_sequence</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.degree_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.degree_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Degree sequence is a list of all degrees in non-increasing order.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a degree sequence of the graph</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.density">
+<code class="descname">density</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.density"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.density" title="Permalink to this definition">¶</a></dt>
+<dd><p>Density is ratio of number of edges and number of edges that
+complete graph has with the same number of vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns the density of the graph</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.diameter">
+<code class="descname">diameter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.diameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.diameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the diameter of the graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The maximum of distances between any pair
+of nodes or infinity if the graph is not connected</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.edges">
+<code class="descname">edges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.edges" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of tuples representing the edges of the graph</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.erdos_gallai">
+<code class="descname">erdos_gallai</code><span class="sig-paren">(</span><em>degree_seq=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.erdos_gallai"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.erdos_gallai" title="Permalink to this definition">¶</a></dt>
+<dd><p>Erdos Gallai theorem states that a non-increasing
+sequence of n numbers d_i is a degree sequence of a simple graph
+if and only if the sum of sequence is even and the condition
+$sum_{i=1}^{k}{d_i} leq k(k-1) + sum_{i=k+1}^n min(d_i, k)  ext{ for all } k$
+This can be implemented in time $O(n)$. However, the current implementation
+requires O(n^2) time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>degree_seq</strong> – If it is None, then the degree sequence of the graph is used.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the degree sequence satisfies both conditions and False otherwise</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.find_isolated_vertices">
+<code class="descname">find_isolated_vertices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.find_isolated_vertices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.find_isolated_vertices" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of vertices of degree 0.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.get_neighbors">
+<code class="descname">get_neighbors</code><span class="sig-paren">(</span><em>u</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.get_neighbors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.get_neighbors" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>u</strong> – vertex in the graph</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list of neighbors of u</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.global_clustering_coefficient">
+<code class="descname">global_clustering_coefficient</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.global_clustering_coefficient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.global_clustering_coefficient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Global clustering coefficient is the ratio of number of triangles and
+number of connected triplets of vertices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">float, clustering coefficient of the graph</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.in_neighbourhood">
+<code class="descname">in_neighbourhood</code><span class="sig-paren">(</span><em>u</em>, <em>v</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.in_neighbourhood"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.in_neighbourhood" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>u</strong> – a vertex of the graph</li>
+<li><strong>v</strong> – a vertex of the graph</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns True if v is in the neighborhood of u.
+It raises KeyError if u is not present in the graph.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.is_vertex_present">
+<code class="descname">is_vertex_present</code><span class="sig-paren">(</span><em>vertex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.is_vertex_present"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.is_vertex_present" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the vertex is already created. Returns True if it is otherwise False</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vertex</strong> – name of the vertex</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true if vertex is in the graph, false otherwise</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.number_of_edges">
+<code class="descname">number_of_edges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.number_of_edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.number_of_edges" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns the number of edges</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.number_of_vertices">
+<code class="descname">number_of_vertices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.number_of_vertices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.number_of_vertices" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns the number of vertices</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.read_from_file">
+<code class="descname">read_from_file</code><span class="sig-paren">(</span><em>filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.read_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.read_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads graph from a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – path to the file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the graph is read successfully. If
+filename is not specified or it does not exist, ValueError
+and IOError are raised (respectively).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.shortest_path">
+<code class="descname">shortest_path</code><span class="sig-paren">(</span><em>u=None</em>, <em>v=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.shortest_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.shortest_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the shortest path between u and v.
+If both of them are None, then computes the shorthest path
+between all pair of vertices.
+If u is not None and v is None, then it computes the shortest path
+between u and all other vertices.
+Finally, if both of them are not None, it computes the shorthest path
+between u and v.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>u</strong> – the source vertex</li>
+<li><strong>v</strong> – the end vertex</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the shortest path</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.spanning_tree">
+<code class="descname">spanning_tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.spanning_tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.spanning_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the spanning tree of the graph using Kruskal algorithm
+and union - find. Complexity: $O(mlog*(n))$</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of tuples representing edges of the tree</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.update_neighbors">
+<code class="descname">update_neighbors</code><span class="sig-paren">(</span><em>u</em>, <em>new_neighbors</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.update_neighbors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.update_neighbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the list of vertices of a vertex.
+:param u: Vertex whose neighborhood is updated
+:param new_neighbors: (list) New neighbors of u
+:return: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.vertex_degree">
+<code class="descname">vertex_degree</code><span class="sig-paren">(</span><em>vertex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.vertex_degree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.vertex_degree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the degree of the vertex.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vertex</strong> – vertex for which degree is computed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">return the degree if the vertex is present, otherwise raises keyerror</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.vertices">
+<code class="descname">vertices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.vertices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.vertices" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the vertices of a graph</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph.Graph.vertices_degree_list">
+<code class="descname">vertices_degree_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph.html#Graph.vertices_degree_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph.Graph.vertices_degree_list" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns a list of degrees of vertices</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="assignment2.html" title="previous chapter">Assignment 2</a></li>
+      <li>Next: <a href="algorithms_erdos_renyi.html" title="next chapter">Algorithms</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Vladan Jovicic.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/code.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
