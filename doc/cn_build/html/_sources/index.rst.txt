@@ -14,6 +14,7 @@ Welcome to Complex Networks Algorithms's documentation!
    testing
    project
    assignment2
+   assignment3
    code
    algorithms_erdos_renyi
 

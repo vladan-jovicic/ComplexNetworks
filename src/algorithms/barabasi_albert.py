@@ -26,7 +26,7 @@ def barabasi_albert(N, m, g=None, n=None, p=None, seed=1):
 
     if g is None:
         p = rng.uniform(0, 1.0)
-        n = rng.randint(0, 5)
+        n = rng.randint(0, 20)
         g = er.er_np(n, p)
 
     if N <= n:
@@ -37,20 +37,19 @@ def barabasi_albert(N, m, g=None, n=None, p=None, seed=1):
         g.add_vertex(u)
 
     degree_sum = 2*g.number_of_edges()
-    all_vertices = range(N)
 
     for u in range(n, N):
         # construct probabilities
         degree_dist = np.array(g.vertices_degree_list(), dtype=np.float32)
         # note that it will not be connected to itself
         # since u does not belong to the support of our pmf
-        probas = degree_dist / float(degree_sum)
+        probas = degree_dist / sum(degree_dist)
+        # print(sum(probas))
 
-        u_neighbors = rng.choice(all_vertices, m, False, probas)
+        u_neighbors = rng.choice(g.vertices(), m, True, probas)
 
         for v in u_neighbors:
             g.add_edge((u, v))
-        degree_sum += 2*m
 
     return g
 
